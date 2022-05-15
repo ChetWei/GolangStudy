@@ -375,11 +375,91 @@ func main() {
 }
 ```
 
+## 切片(动态数组)
+
+### 普通数组的传参
+
+```go
+func printArray(myArray [3]int) {
+   //有指定长度数组时，使用的是值拷贝
+   fmt.Println("----------------printArray----------")
+   for index, value := range myArray {
+      fmt.Println(" index= ", index, " value= ", value)
+   }
+   myArray[0] = 1000
+}
+
+func main() {
+
+   var myArray = [3]int{10, 20, 30}
+
+   printArray(myArray)
+
+   printArray(myArray)
+}
+```
+
+### 动态数组(切片)的传参
+
+```go
+func printArray2(myArray []int) {
+   //使用切片动态数组参数的时候，使用的是引用传递
+   fmt.Println("----------------printArray----------")
+   for _, value := range myArray {
+      fmt.Println(" value= ", value)
+   }
+   myArray[0] = 1000
+}
+
+func main() {
+
+   //动态数组，切片slice，根据元素个数自动分配空间
+   var myArray = []int{10, 20, 30}
+
+   //切片引用传递
+   printArray2(myArray)
+
+   printArray2(myArray)
+}
+```
+
 
 
 ## 6.结构体
 
+```go
+//给类型取别名
+type myint int
 
+//定义结构体
+type Book struct {
+   title string
+   price float32
+}
+
+func changeBook(book Book) {
+   //传递的是book的一个副本
+   book.price *= 100
+}
+
+func changeBook2(book *Book) {
+   //传递的是book的一个指针
+   book.price *= 100
+}
+
+func main() {
+
+   var book1 Book //声明一个Book类型
+   book1.title = "Golang"
+   book1.price = 12.34
+
+   fmt.Println(book1)
+   changeBook(book1)
+   fmt.Println(book1)
+   changeBook2(&book1)
+   fmt.Println(book1)
+}
+```
 
 
 
@@ -795,7 +875,41 @@ func main() {
 }
 ```
 
-## 12.切片
+## defer 语句
+
+> defer关键字类似于c++的析构，在方法执行结束的时候执行
+>
+> defer与return谁先执行呢?
+
+```go
+package main
+
+import "fmt"
+
+//defer 和 return 谁先执行
+
+func deferFunc() int {
+   fmt.Println("defer func call")
+   return 0
+}
+
+func returnFunc() int {
+   fmt.Println("rerutn func call")
+   return 0
+}
+
+func returnAndDefer() int {
+   defer deferFunc()
+   return returnFunc()
+}
+
+func main() {
+   //当有return和defer的时候，先执行return 再执行 defer
+   returnAndDefer()
+}
+```
+
+## 
 
 
 
