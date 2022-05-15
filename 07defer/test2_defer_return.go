@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+//defer 和 return 谁先执行
+
 func deferFunc() int {
 	fmt.Println("defer func call")
 	return 0
