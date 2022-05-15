@@ -423,6 +423,68 @@ func main() {
 }
 ```
 
+### 判断空切片
+
+```go
+func main() {
+   var slice1 []int
+
+   //空切片
+   if slice1 == nil {
+      fmt.Println("len slice ", len(slice1)) //没有分配slice空间 长度为0
+   }
+
+   slice1 = make([]int, 3) //开辟3个空间，int默认值为0
+   fmt.Println("len slice ", len(slice1))
+}
+```
+
+### 切片的扩容机制
+
+```go
+func main() {
+   //创建一个切片，最大容量 cap=5，3个默认值0
+   var numbers = make([]int, 3, 5)
+   fmt.Println("numbers", numbers)
+   fmt.Printf("numbers len = %d, cap=%d,slice=%v \n", len(numbers), cap(numbers), numbers)
+
+   numbers = append(numbers, 1)
+   numbers = append(numbers, 2)
+
+   //切片扩容机制
+   //此时cap的容量已经满了，会动态开辟新的容量，开辟的容量为 +cap
+   numbers = append(numbers, 3)
+   numbers = append(numbers, 4)
+   fmt.Printf("numbers len = %d, cap=%d,slice=%v \n", len(numbers), cap(numbers), numbers)
+}
+```
+
+### 切片的截取与复制
+
+```go
+func main() {
+   s := []int{1, 2, 3}
+
+   //截取操作，s1 指向的内存值和 s是一致的
+   s1 := s[0:2]
+
+   //如果s1修改了，那么s的值也会被修改
+   s1[0] = 55
+
+   fmt.Println(s)
+   fmt.Println(s1)
+
+   //copy可以将底层数组的slice一起进行拷贝
+   s2 := make([]int, 3)
+   copy(s2, s)
+   fmt.Println(s2)
+}
+```
+
+
+
+
+
 
 
 ## 6.结构体
@@ -909,8 +971,6 @@ func main() {
 }
 ```
 
-## 
-
 
 
 
@@ -931,7 +991,86 @@ func main() {
 
 ## 14.集合 Map
 
+### map的声明方式
 
+```go
+func main() {
+
+   //=====> 第一种声明方式
+
+   //声明myMap1是一个map类型，key是string，value是string
+   var myMap1 map[string]string
+
+   if myMap1 == nil {
+      fmt.Println("myMap1 是一个空map!")
+   }
+
+   //使用map前，需要使用make给map分配空间
+   myMap1 = make(map[string]string, 10)
+
+   //给map变量赋值
+   myMap1["one"] = "java"
+   myMap1["two"] = "c++"
+   myMap1["three"] = "python"
+
+   fmt.Println(myMap1)
+
+   // ==> 第二种声明方式
+   myMap2 := make(map[string]int)
+   myMap2["java"] = 1
+   myMap2["c++"] = 2
+   myMap2["python"] = 3
+   fmt.Println(myMap2)
+
+   // ==> 第三种声明方式
+   myMap3 := map[string]int{
+      "one":   1,
+      "two":   2,
+      "three": 3,
+   }
+   fmt.Println(myMap3)
+}
+```
+
+### map的操作
+
+```go
+//map传参使用的是引用传递
+func modifyMap(cityMap map[string]string) {
+	cityMap["England"] = "London"
+}
+
+func main() {
+	cityMap := make(map[string]string)
+
+	//添加
+	cityMap["China"] = "Beijing"
+	cityMap["Japan"] = "Tokyo"
+	cityMap["USA"] = "NewYork"
+
+	//遍历 无序的
+	for key, value := range cityMap {
+		fmt.Println("key =", key)
+		fmt.Println("value = ", value)
+	}
+
+	//修改
+	cityMap["USA"] = "DC"
+
+	fmt.Println("cityMap: ", cityMap)
+
+	//删除
+	delete(cityMap, "China")
+
+	//访问
+	fmt.Println("cityMap[\"China\"]: ", cityMap["China"])
+
+	modifyMap(cityMap)
+
+	fmt.Println(cityMap)
+
+}
+```
 
 ## interface
 
