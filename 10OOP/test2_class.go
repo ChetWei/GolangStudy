@@ -39,5 +39,4 @@ func main() {
 
 	superMan2.Eat()
 	superMan2.Walk()
-
 }

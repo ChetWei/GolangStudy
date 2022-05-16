@@ -1084,9 +1084,97 @@ func main() {
 
 ## 面向对象特征
 
+> golang中并没有明确的面向对象的说法，实在要扯上的话，可以将struct比作其它语言中的class
+
 ### 1）封装
 
+>类名、属性名、方法名
+>
+>首字母大写表示对外（其他包可以访问，否则只能够在本包内访问）
+
+```go
+//定义一个Hero类
+type Hero struct {
+	Name  string
+	Ad    int
+	Level int
+}
+
+//给结构体绑定方法
+func (this Hero) showName() {
+	//this 是调用该方法的对象的一个副本（拷贝）
+	fmt.Println("Name =", this.Name)
+}
+
+func (this *Hero) GetName() string {
+	//this 是调用该方法的对象的一个引用
+	return this.Name
+}
+
+func (this *Hero) SetName(newName string) {
+	this.Name = newName
+}
+
+func main() {
+	//创建一个对象
+	hero := Hero{"zhangsan", 100, 1}
+
+	hero.showName()
+
+	hero.SetName("lisi")
+
+	hero.showName()
+
+	name := hero.GetName()
+	fmt.Println(name)
+
+}
+```
+
 ### 2）继承
+
+```go
+//结构体类的继承
+type Human struct {
+	name string
+	sex  string
+}
+
+func (this *Human) Eat() {
+	fmt.Println("Human.Eat()...")
+}
+
+type SuperMan struct {
+	Human  //SupeMan类继承了Human类的成员和方法
+	height float32
+}
+
+//重新定义父类的方法Eat
+func (this *SuperMan) Eat() {
+	fmt.Println("Superman.Eat()...")
+}
+
+//子类的新方法
+func (this *SuperMan) Walk() {
+	fmt.Println("Superman.Walk")
+}
+
+func main() {
+	human := Human{"zhangsan", "female"}
+	human.Eat()
+
+	superMan := SuperMan{human, 160}
+	superMan2 := SuperMan{Human{"lisi", "male"}, 180}
+
+	superMan.Eat()
+	superMan.Walk()
+
+	superMan2.Eat()
+	superMan2.Walk()
+}
+```
+
+
 
 ### 3）多态
 
