@@ -32,4 +32,9 @@ func main() {
 	myFunc(100)
 	myFunc("abc")
 	myFunc(3.14)
+
+	a := "abcd"
+	var allType interface{} //万能数据类型
+	allType = a
+	fmt.Println(allType)
 }
