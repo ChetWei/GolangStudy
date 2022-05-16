@@ -11,7 +11,7 @@ func myFunc(arg interface{}) {
 
 	//使用 interface{} 如何区分 引用的底层数据类型是什么？
 
-	// 给interface{} 提供"类型断言"的机制
+	// 给interface{} 提供"类型断 言"的机制
 	value, ok := arg.(string) //如果是string ok=true
 	if ok {
 		fmt.Println("arg is string type,value= ", value)
