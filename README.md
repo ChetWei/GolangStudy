@@ -1818,7 +1818,7 @@ GOPATH的弊端
 #### go mod 命令
 
 ```
-go mod init  生成go.mod文件
+go mod init  <起当前项目模块名称> 在当前文件夹下生成go.mod文件
 go mod download 下载go.mod 文件中指明的依赖
 go mod tidy 整理现有的依赖
 go mod graph  查看现有的依赖结构
@@ -1841,3 +1841,62 @@ go env -w GO1111MODULE=on
 
 
 #### GOPROXY
+
+> go模块代理
+
+- 阿里云
+
+  https://mirrors.aliyun.com/goproxy/
+
+- 七牛云
+
+  https://goproxy.cn,direct
+
+  direct,指示回源抓取，如果在代理库中没有
+
+```
+go env -w GOPROXY=https://goproxy.cn,direct
+```
+
+GOSUMDB 拉取模块时，校验第三方库是否被篡改过
+
+
+
+GOPRIVATE 设置私有仓库
+
+```
+go env -w GOPRIVATE="*.example.com"
+
+表示所有模块路径为example.com的子域名都到私有库进行下载
+```
+
+
+
+根据 go mod 文件拉取依赖
+
+手动 down 
+
+```
+go get <模块名称> //会在mod文件中，添加一行依赖的信息
+```
+
+`//indirect`的含义 间接依赖这个包
+
+
+
+自动down
+
+> 在 go mod 文件中添加依赖的信息
+
+修改模块的依赖关系
+
+> - 可以直接修改mod中的版本信息
+> - 使用 go mod edit -replace=<模块> 进行替换
+
+
+
+
+
+## 参考
+
+> https://www.bilibili.com/video/BV1gf4y1r79E
