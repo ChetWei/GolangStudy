@@ -73,7 +73,7 @@ func (this *Server) Handeler(conn net.Conn) {
 			// 不做任何事情，为了激活select，更新下面的定时器
 
 		//time.After 表示定时器，会定时触发，进入这个case
-		case <-time.After(time.Second * 10):
+		case <-time.After(time.Minute * 5):
 			//已经超时10S，将当前的User强制关闭
 			user.SendMsg("由于长时间没有发送消息，你已被强制下线\n")
 			//销毁用户的资源
