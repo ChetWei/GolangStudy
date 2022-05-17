@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net"
+	"strings"
 )
 
 type User struct {
@@ -58,6 +60,7 @@ func (this *User) SendMsg(msg string) {
 
 //用户处理消息的业务
 func (this *User) DoMessage(msg string) {
+	fmt.Println(msg)
 	if msg == "who" {
 		//查询当前在线用户都有哪些
 		this.server.mapLock.Lock()
@@ -66,6 +69,23 @@ func (this *User) DoMessage(msg string) {
 			this.SendMsg(onlineMsg)
 		}
 		this.server.mapLock.Unlock()
+	} else if len(msg) > 7 && msg[:7] == "rename|" {
+		//消息格式：rename|张三
+		newName := strings.Split(msg, "|")[1]
+		//判断当前的name是否已经存在
+		_, ok := this.server.OnlineMap[newName]
+		if ok {
+			this.SendMsg("当前用户名已被使用\n")
+		} else {
+			//修改用户名
+			this.server.mapLock.Lock()
+			delete(this.server.OnlineMap, this.Name)
+			this.server.OnlineMap[newName] = this
+			this.server.mapLock.Unlock()
+
+			this.Name = newName
+			this.SendMsg("成功更新用户名为:" + this.Name + "\n")
+		}
 	} else {
 		//广播消息
 		this.server.BroadCast(this, msg)
